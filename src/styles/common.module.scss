@@ -3,10 +3,45 @@
   font-size: 1rem;
   font-weight: normal;
   color: var(--grey-100);
+
+  p, ul {
+    margin: 1.5rem 0;
+  }
+
+  ul {
+    margin-left: 1.5rem;
+
+    li {
+      margin: 0.5rem 0;
+    }
+  }
 }
 
 .postInfoText {
   font-size: 0.78rem;
   font-weight: normal;
   color: var(--grey-200);
+}
+
+.postInfoContainer {
+
+  display: flex;
+  align-items: center;
+
+  margin-top: 24px;
+
+
+  svg:first-child {
+    margin-left: 0;
+
+  
+  }
+
+  svg {
+    margin-right: 8px;
+    margin-left: 24px;
+
+  
+  }
+
 }

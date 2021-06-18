@@ -2,7 +2,11 @@ import { useState } from 'react';
 
 import { GetStaticProps } from 'next';
 
+import { format } from 'date-fns';
+
 import { FiCalendar, FiUser } from 'react-icons/fi';
+
+import Link from 'next/link';
 
 import Prismic from '@prismicio/client';
 import { useEffect, useCallback } from 'react';
@@ -22,6 +26,7 @@ interface Post {
 }
 
 interface PostPagination {
+  uid: string;
   next_page: string;
   results: Post[];
 }
@@ -42,8 +47,9 @@ export default function Home({ postsPagination }: HomeProps): React.ReactNode {
       .then(data => {
         setNextPageLink(data.next_page);
 
-        const newPosts = data?.results.map(post => ({
+        const newPosts = data?.results.map((post, index) => ({
           ...post,
+          uid: data.results[index].uid,
           first_publication_date: new Date(
             post.first_publication_date
           ).toLocaleDateString('pt-BR', {
@@ -59,15 +65,14 @@ export default function Home({ postsPagination }: HomeProps): React.ReactNode {
 
   useEffect(() => {
     setPosts(
-      postsPagination?.results.map(post => ({
+      postsPagination?.results.map((post, index) => ({
         ...post,
-        first_publication_date: new Date(
-          post.first_publication_date
-        ).toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric',
-        }),
+        uid: postsPagination.results[index].uid,
+        first_publication_date: format(
+          new Date(post.first_publication_date),
+          'dd MMM yyyy',
+          {}
+        ).toLowerCase(),
       }))
     );
 
@@ -76,24 +81,27 @@ export default function Home({ postsPagination }: HomeProps): React.ReactNode {
 
   return (
     <div className={styles.container}>
-      <img src="/images/logo.svg" alt="logo" />
       {posts?.map(post => (
-        <div className={styles.postContainer} key={post.uid}>
-          <h1 className={styles.postTitle}>{post.data.title}</h1>
-          <h1 className={commonStyles.postText}>{post.data.subtitle}</h1>
-          <div>
-            <div className={styles.postInfoContainer}>
-              <FiCalendar color="#BBBBBB" />
-              <span className={commonStyles.postInfoText}>
-                {post.first_publication_date}
-              </span>
-              <FiUser color="#BBBBBB" />
-              <span className={commonStyles.postInfoText}>
-                {post.data.author}
-              </span>
+        <Link href={`post/${post.uid}`} key={post.uid}>
+          <a>
+            <div className={styles.postContainer}>
+              <h1 className={styles.postTitle}>{post.data.title}</h1>
+              <h1 className={commonStyles.postText}>{post.data.subtitle}</h1>
+              <div>
+                <div className={commonStyles.postInfoContainer}>
+                  <FiCalendar color="#BBBBBB" />
+                  <span className={commonStyles.postInfoText}>
+                    {post.first_publication_date}
+                  </span>
+                  <FiUser color="#BBBBBB" />
+                  <span className={commonStyles.postInfoText}>
+                    {post.data.author}
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </a>
+        </Link>
       ))}
       {nextPageLink && (
         <button
