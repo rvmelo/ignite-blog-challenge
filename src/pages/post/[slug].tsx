@@ -13,6 +13,8 @@ import Prismic from '@prismicio/client';
 import { FiCalendar, FiUser, FiClock } from 'react-icons/fi';
 import { getPrismicClient } from '../../services/prismic';
 
+import Comment from '../../components/Comments';
+
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 
@@ -82,19 +84,19 @@ export default function Post({ post }: PostProps): JSX.Element {
         </div>
 
         {post.data.content.map(content => (
-          <>
+          <div key={content.heading}>
             <div className={styles.contentHeading}>
               <span>{content.heading}</span>
             </div>
             <div
-              key={content.heading}
               className={commonStyles.postText}
               dangerouslySetInnerHTML={{
                 __html: String(RichText.asHtml(content.body)),
               }}
             />
-          </>
+          </div>
         ))}
+        <Comment />
       </main>
     </div>
   ) : (

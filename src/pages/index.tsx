@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import { useState } from 'react';
 
 import { GetStaticProps } from 'next';
@@ -33,11 +34,14 @@ interface PostPagination {
 
 interface HomeProps {
   postsPagination: PostPagination;
+  preview: boolean;
+  previewData: {
+    ref: string;
+  };
 }
 
 export default function Home({ postsPagination }: HomeProps): React.ReactNode {
   // TODO
-
   const [posts, setPosts] = useState<Post[]>([]);
   const [nextPageLink, setNextPageLink] = useState('');
 
@@ -116,13 +120,16 @@ export default function Home({ postsPagination }: HomeProps): React.ReactNode {
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async ({
+  previewData,
+  preview = false,
+}: HomeProps) => {
   const prismic = getPrismicClient();
   const postsResponse = await prismic.query(
     [Prismic.predicates.at('document.type', 'posts')],
     {
       fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
-      pageSize: 1,
+      ref: previewData?.ref ?? null,
     }
   );
 
@@ -130,6 +137,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       postsPagination: postsResponse,
+      preview,
     },
   };
 };
