@@ -1,8 +1,74 @@
 // TODO
 
+.postNavigationContainer {
+  max-width: 700px;
+
+  margin-bottom: 80px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.divider {
+  max-width: 100%;
+  border: solid var(--grey-100);
+  border-top-width: 0.5px;
+  border-bottom-width: 0;
+  margin: 60px auto 48px;
+}
+
+.leftLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 10px;
+
+  font-size: 1rem;
+  color: var(--white);
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  span:last-child {
+    margin-top: 8px;
+    font-size: 16px;
+    color: var(--pink);
+    font-weight: 600;
+  }
+
+}
+
+
+
+.rightLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: 10px;
+  text-align: right;
+
+  font-size: 1rem;
+  color: var(--white);
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  
+  span:last-child {
+    margin-top: 8px;
+    font-size: 16px;
+    color: var(--pink);
+    font-weight: 600;
+  }
+
+}
+
 .container {
   display: flex;
   flex-direction: column;
+  padding-bottom: 80px;
 }
 
 .bannerImg {
@@ -13,7 +79,7 @@
 }
 
 .main {
-  max-width: 721px;
+  max-width: 700px;
   margin: 80px auto;
 }
 

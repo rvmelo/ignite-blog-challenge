@@ -40,7 +40,10 @@ interface HomeProps {
   };
 }
 
-export default function Home({ postsPagination }: HomeProps): React.ReactNode {
+export default function Home({
+  postsPagination,
+  preview,
+}: HomeProps): React.ReactNode {
   // TODO
   const [posts, setPosts] = useState<Post[]>([]);
   const [nextPageLink, setNextPageLink] = useState('');
@@ -84,37 +87,50 @@ export default function Home({ postsPagination }: HomeProps): React.ReactNode {
   }, [postsPagination, setNextPageLink]);
 
   return (
-    <div className={styles.container}>
-      {posts?.map(post => (
-        <Link href={`post/${post.uid}`} key={post.uid}>
-          <a>
-            <div className={styles.postContainer}>
-              <h1 className={styles.postTitle}>{post.data.title}</h1>
-              <h1 className={commonStyles.postText}>{post.data.subtitle}</h1>
-              <div>
-                <div className={commonStyles.postInfoContainer}>
-                  <FiCalendar color="#BBBBBB" />
-                  <span className={commonStyles.postInfoText}>
-                    {post.first_publication_date}
-                  </span>
-                  <FiUser color="#BBBBBB" />
-                  <span className={commonStyles.postInfoText}>
-                    {post.data.author}
-                  </span>
+    <div className={styles.mainContainer}>
+      <div className={styles.container}>
+        {posts?.map(post => (
+          <div className={styles.postContainer} key={post.uid}>
+            <Link href={`post/${post.uid}`}>
+              <a>
+                <div>
+                  <h1 className={styles.postTitle}>{post.data.title}</h1>
+                  <h1 className={commonStyles.postText}>
+                    {post.data.subtitle}
+                  </h1>
+                  <div>
+                    <div className={commonStyles.postInfoContainer}>
+                      <FiCalendar color="#BBBBBB" />
+                      <span className={commonStyles.postInfoText}>
+                        {post.first_publication_date}
+                      </span>
+                      <FiUser color="#BBBBBB" />
+                      <span className={commonStyles.postInfoText}>
+                        {post.data.author}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </a>
-        </Link>
-      ))}
-      {nextPageLink && (
-        <button
-          className={styles.loadMoreTextButton}
-          onClick={handlePostRequest}
-          type="button"
-        >
-          <span>Carregar mais posts</span>
-        </button>
+              </a>
+            </Link>
+          </div>
+        ))}
+        {nextPageLink && (
+          <button
+            className={styles.loadMoreTextButton}
+            onClick={handlePostRequest}
+            type="button"
+          >
+            <span>Carregar mais posts</span>
+          </button>
+        )}
+      </div>
+      {preview && (
+        <aside className={commonStyles.previewButton}>
+          <Link href="/api/exit-preview">
+            <a>Sair do modo Preview</a>
+          </Link>
+        </aside>
       )}
     </div>
   );
@@ -129,6 +145,7 @@ export const getStaticProps: GetStaticProps = async ({
     [Prismic.predicates.at('document.type', 'posts')],
     {
       fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
+      pageSize: 1,
       ref: previewData?.ref ?? null,
     }
   );

@@ -1,14 +1,17 @@
 // TODO
 
+.mainContainer {
+  padding-bottom: 106px;
+}
+
 .container {
  display: flex;
  flex-direction: column;
 
- margin: 0 auto;
+ margin: 0 auto 88px;
 //  padding-top: 79.55px;
 
  max-width: 700px;
-
 
  img {
    max-width: 238.62px;
@@ -37,7 +40,7 @@
 .postContainer {
 
   margin-top: 67.44px;
-
+  
   & + div {
     margin-top: 59.67px;
   }
